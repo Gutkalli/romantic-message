@@ -108,16 +108,14 @@
     }
 
     .heart {
-      position: fixed;
+      position: absolute;
       width: 20px;
       height: 20px;
       background: red;
-      top: 100%;
       transform: rotate(45deg);
       animation: float 5s linear forwards;
       pointer-events: none;
       z-index: 2;
-      opacity: 1;
     }
 
     .heart::before,
@@ -146,11 +144,12 @@
         opacity: 1;
       }
       100% {
-        transform: translateY(-110vh) rotate(45deg);
+        transform: translateY(-100vh) rotate(45deg);
         opacity: 0;
       }
     }
 
+    /* Grande coração com mensagem final */
     #finalHeart {
       position: fixed;
       top: 50%;
@@ -193,6 +192,7 @@
       color: white;
       text-shadow: 0 0 12px #ff6f91;
       user-select: none;
+      animation: textZoom 2s ease-in-out infinite;
     }
 
     @keyframes pulseHeart {
@@ -203,29 +203,72 @@
         box-shadow: 0 0 40px 12px rgba(255, 111, 145, 0.9);
       }
     }
+
+    @keyframes textZoom {
+      0%, 100% {
+        transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+      }
+      50% {
+        transform: translate(-50%, -50%) rotate(-45deg) scale(1.2);
+      }
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: sparkleAnim 2s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    @keyframes sparkleAnim {
+      0% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5) translateY(-10px);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body>
   <div class="stars" id="stars"></div>
 
-  <div id="startScreen" role="dialog" aria-modal="true" aria-label="Iniciar a mensagem romântica">
+  <div id="startScreen">
     <h1>Uma Mensagem Romântica para Ti</h1>
-    <button id="startButton" aria-label="Começar a mensagem">Começar</button>
+    <button id="startButton">Começar</button>
   </div>
 
-  <div class="container" id="messageContainer" aria-live="polite" role="main">
+  <div class="container" id="messageContainer">
     <h1>Uma Mensagem Romântica para Ti</h1>
     <p id="messageText"></p>
     <p class="signature">Com todo o meu amor,<br>Raúl</p>
   </div>
 
-  <div id="finalHeart" role="img" aria-label="Coração final com frase Eu Te Amo">
+  <div id="finalHeart">
     <div id="finalHeartText">Eu Te Amo</div>
   </div>
 
   <audio id="romanticAudio" loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/26/audio_9cd7dbac17.mp3?filename=romantic-call-6416.mp3" type="audio/mpeg" />
-    Seu navegador não suporta o elemento áudio.
   </audio>
 
   <script>
@@ -256,15 +299,16 @@ Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre 
       const heart = document.createElement('div');
       heart.classList.add('heart');
       heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.top = '100%';
       heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
       document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 6000);
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
     }
 
     let heartsInterval;
     function startHearts() {
-      heartsInterval = setInterval(generateHeart, 400);
+      heartsInterval = setInterval(generateHeart, 500);
     }
 
     function stopHearts() {
@@ -288,123 +332,43 @@ Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre 
       });
     }
 
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+
+      const size = Math.random() * 8 + 4;
+      sparkle.style.width = sparkle.style.height = size + 'px';
+
+      const angle = Math.random() * 2 * Math.PI;
+      const radius = 100;
+      const x = Math.cos(angle) * radius + window.innerWidth / 2;
+      const y = Math.sin(angle) * radius + window.innerHeight / 2;
+
+      sparkle.style.left = `${x}px`;
+      sparkle.style.top = `${y}px`;
+
+      document.body.appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 3000);
+    }
+
+    function showFinalHeartWithEffects() {
+      finalHeart.style.display = 'block';
+      finalHeart.classList.add('fade-in');
+      let sparkleInterval = setInterval(createSparkle, 300);
+      setTimeout(() => clearInterval(sparkleInterval), 10000);
+    }
+
     startButton.addEventListener('click', async () => {
       try {
         await audio.play();
-      } catch (e) { }
+      } catch (e) {}
       startScreen.style.display = 'none';
       messageContainer.style.display = 'block';
       startHearts();
       await typeMessage(message, messageText);
       stopHearts();
-      setTimeout(() => {
-        finalHeart.style.display = 'block';
-      }, 5000);
+      setTimeout(showFinalHeartWithEffects, 5000);
     });
   </script>
 </body>
 </html>
-<!-- CONTINUAÇÃO DO SEU HTML -->
-<style>
-  /* Efeito de partículas suaves */
-  .sparkle {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: sparkleAnim 2s infinite ease-in-out;
-    pointer-events: none;
-  }
-
-  @keyframes sparkleAnim {
-    0% {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-    }
-    50% {
-      transform: scale(1.5) translateY(-10px);
-      opacity: 0.5;
-    }
-    100% {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-    }
-  }
-
-  /* Animação no texto "Eu Te Amo" */
-  #finalHeartText {
-    animation: textZoom 2s ease-in-out infinite;
-  }
-
-  @keyframes textZoom {
-    0%, 100% {
-      transform: translate(-50%, -50%) rotate(-45deg) scale(1);
-    }
-    50% {
-      transform: translate(-50%, -50%) rotate(-45deg) scale(1.2);
-    }
-  }
-
-  /* Fade-in especial */
-  .fade-in {
-    animation: fadeIn 2s ease forwards;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-  }
-</style>
-
-<script>
-  // Geração de brilhos ao redor do coração
-  function createSparkle() {
-    const sparkle = document.createElement('div');
-    sparkle.classList.add('sparkle');
-
-    const size = Math.random() * 8 + 4;
-    sparkle.style.width = sparkle.style.height = size + 'px';
-
-    const angle = Math.random() * 360;
-    const radius = 100;
-    const x = Math.cos(angle) * radius + window.innerWidth / 2;
-    const y = Math.sin(angle) * radius + window.innerHeight / 2;
-
-    sparkle.style.left = `${x}px`;
-    sparkle.style.top = `${y}px`;
-
-    document.body.appendChild(sparkle);
-
-    setTimeout(() => sparkle.remove(), 3000);
-  }
-
-  // Mostra o coração final e inicia animações
-  function showFinalHeartWithEffects() {
-    finalHeart.style.display = 'block';
-    finalHeart.classList.add('fade-in');
-
-    // Inicia brilhos
-    let sparkleInterval = setInterval(createSparkle, 300);
-
-    // Para brilhos depois de um tempo (opcional)
-    setTimeout(() => clearInterval(sparkleInterval), 10000);
-  }
-
-  // Substitui chamada anterior
-  startButton.addEventListener('click', async () => {
-    try {
-      await audio.play();
-    } catch (e) {}
-    startScreen.style.display = 'none';
-    messageContainer.style.display = 'block';
-    startHearts();
-    await typeMessage(message, messageText);
-    stopHearts();
-
-    // Chama nova função com efeitos especiais
-    setTimeout(showFinalHeartWithEffects, 5000);
-  });
-</script>
-
