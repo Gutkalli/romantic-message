@@ -44,16 +44,17 @@
 
     .container {
       position: relative;
-      z-index: 2;
+      z-index: 5;
       max-width: 800px;
       margin: 60px auto;
       padding: 60px 30px;
-      background: rgba(255, 0, 76, 0.1);
+      background: rgba(255, 0, 76, 0.15);
       border-radius: 20px;
-      box-shadow: 0 0 40px rgba(255, 153, 204, 0.3);
-      backdrop-filter: blur(6px);
+      box-shadow: 0 0 40px rgba(255, 153, 204, 0.4);
+      backdrop-filter: blur(8px);
       text-align: center;
       display: none;
+      user-select: none;
     }
 
     h1 {
@@ -68,8 +69,9 @@
       font-size: 1.3em;
       line-height: 1.7;
       color: #ffe6eb;
-      text-shadow: 0 0 4px #a60a3d;
+      text-shadow: 0 0 5px #a60a3d;
       margin-bottom: 25px;
+      min-height: 6em;
     }
 
     .signature {
@@ -77,7 +79,10 @@
       font-size: 2.3em;
       color: #ffc0cb;
       margin-top: 40px;
-      text-shadow: 0 0 6px #ff5e7d;
+      text-shadow: 0 0 8px #ff5e7d;
+      min-height: 3em;
+      white-space: pre-wrap;
+      letter-spacing: 0.05em;
     }
 
     #startScreen {
@@ -91,7 +96,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 3;
+      z-index: 10;
     }
 
     #startScreen h1 {
@@ -106,12 +111,18 @@
       background-color: #ff5f84;
       color: white;
       border: none;
-      padding: 12px 20px;
-      font-size: 1.2em;
+      padding: 14px 24px;
+      font-size: 1.3em;
       font-weight: bold;
-      border-radius: 12px;
+      border-radius: 16px;
       cursor: pointer;
-      box-shadow: 0 0 10px #ffb6c1;
+      box-shadow: 0 0 15px #ffb6c1;
+      transition: background-color 0.3s ease;
+    }
+
+    #startButton:hover {
+      background-color: #ff2e60;
+      box-shadow: 0 0 20px #ff8090;
     }
 
     .heart {
@@ -121,6 +132,7 @@
       background: red;
       transform: rotate(45deg);
       animation: float 5s linear infinite;
+      z-index: 3;
     }
 
     .heart::before,
@@ -153,6 +165,81 @@
         opacity: 0;
       }
     }
+
+    /* Rosas animadas (pétalas) */
+    .rose-petal {
+      position: fixed;
+      bottom: -40px;
+      width: 30px;
+      height: 30px;
+      background: radial-gradient(circle at center, #ff416c, #ff4b2b);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 6px #ff4b2b);
+      animation: risePetal linear forwards;
+      pointer-events: none;
+      z-index: 4;
+      transform-origin: center bottom;
+    }
+
+    @keyframes risePetal {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.85;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Coração final pulsante */
+    #finalHeart {
+      position: fixed;
+      bottom: 20vh;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 120px;
+      height: 120px;
+      background: #ff416c;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      opacity: 0;
+      box-shadow: 0 0 30px #ff4b2b, 0 0 50px #ff416c;
+      z-index: 6;
+      animation: pulseHeart 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    #finalHeart::before,
+    #finalHeart::after {
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background: #ff416c;
+      border-radius: 50%;
+    }
+
+    #finalHeart::before {
+      top: -60px;
+      left: 0;
+    }
+
+    #finalHeart::after {
+      left: -60px;
+      top: 0;
+    }
+
+    @keyframes pulseHeart {
+      0%, 100% {
+        transform: translateX(-50%) rotate(45deg) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translateX(-50%) rotate(45deg) scale(1.1);
+        opacity: 0.9;
+      }
+    }
   </style>
 </head>
 <body>
@@ -165,13 +252,15 @@
 
   <div class="container" id="messageContainer">
     <p id="messageText"></p>
-    <p class="signature">Com todo o meu amor,<br>Raul</p>
+    <p class="signature" id="signatureText"></p>
   </div>
 
   <audio id="romanticAudio" loop>
     <source src="Sentimental.mp3" type="audio/mpeg" />
     Seu navegador não suporta o elemento de áudio.
   </audio>
+
+  <div id="finalHeart"></div>
 
   <script>
     // Criar estrelas aleatórias
@@ -185,54 +274,8 @@
       starsContainer.appendChild(star);
     }
 
-    // Texto da mensagem
-    const message = `No silêncio da noite, quando as estrelas sussurram segredos ao luar, o meu coração encontra-se em sintonia com a melodia do teu amor. É uma melodia que acalma a minha alma, uma luz que ilumina o meu caminho e a razão pela qual o meu coração bate mais forte a cada dia.
+    const message = `No silêncio da noite, quando as estrelas sussurram segredos ao luar, meu coração encontra-se em sintonia com a melodia do teu amor. Essa melodia acalma a minha alma, ilumina o meu caminho e é a razão pela qual meu coração bate mais forte a cada dia.
 
-Tal como uma rosa desabrocha na primavera, o nosso amor floresce com o tempo, nutrido pela paciência, pela compreensão e pela devoção. Cada pétala representa uma memória preciosa, um momento adquirido no tempo em que nossos corações dançavam em uníssono.
+Assim como a rosa desabrocha na primavera, nosso amor floresce com o tempo, nutrido pela paciência, pela compreensão e pela devoção. Cada pétala representa uma memória preciosa, um momento único em que nossos corações dançaram em uníssono.
 
-Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre do calor dos nossos abraços, da doçura dos nossos beijos e da alegria das nossas gargalhadas partilhadas. É uma obra-prima que a vida pintou na tela do meu coração, e serei eternamente grato pela tua presença na minha vida.`;
-
-    const startButton = document.getElementById('startButton');
-    const startScreen = document.getElementById('startScreen');
-    const messageContainer = document.getElementById('messageContainer');
-    const messageText = document.getElementById('messageText');
-    const audio = document.getElementById('romanticAudio');
-
-    startButton.addEventListener('click', () => {
-      audio.play().then(() => {
-        startScreen.style.display = 'none';
-        messageContainer.style.display = 'block';
-        typeMessage(message, messageText);
-        generateHearts();
-      }).catch(err => {
-        alert('Erro ao iniciar a música: ' + err.message);
-      });
-    });
-
-    function typeMessage(text, element) {
-      let index = 0;
-      function type() {
-        if (index < text.length) {
-          element.innerHTML += text.charAt(index);
-          index++;
-          setTimeout(type, 50);
-        }
-      }
-      type();
-    }
-
-    function generateHearts() {
-      setInterval(() => {
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        document.body.appendChild(heart);
-        setTimeout(() => {
-          heart.remove();
-        }, 5000);
-      }, 500);
-    }
-  </script>
-</body>
-</html>
+Que esta mensagem seja testemunho do meu afeto eterno por ti. Que te recorde do calor dos
