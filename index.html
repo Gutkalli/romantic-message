@@ -54,7 +54,6 @@
       backdrop-filter: blur(6px);
       text-align: center;
       display: none;
-      color: #ffe6eb;
     }
 
     h1 {
@@ -68,9 +67,10 @@
     p {
       font-size: 1.3em;
       line-height: 1.7;
+      color: #ffe6eb;
       text-shadow: 0 0 4px #a60a3d;
       margin-bottom: 25px;
-      white-space: pre-wrap; /* Para respeitar quebras de linha no texto */
+      white-space: pre-wrap;
     }
 
     .signature {
@@ -113,6 +113,11 @@
       border-radius: 12px;
       cursor: pointer;
       box-shadow: 0 0 10px #ffb6c1;
+      transition: background-color 0.3s ease;
+    }
+
+    #startButton:hover {
+      background-color: #ff3b67;
     }
 
     .heart {
@@ -122,7 +127,7 @@
       background: red;
       transform: rotate(45deg);
       animation: float 5s linear infinite;
-      z-index: 4;
+      filter: drop-shadow(0 0 3px #ff4f7d);
     }
 
     .heart::before,
@@ -156,84 +161,46 @@
       }
     }
 
-    /* Novas classes para as flores */
     .flower {
       position: absolute;
-      width: 25px;
-      height: 25px;
-      background: radial-gradient(circle at center, #ff69b4 30%, #ff1493 70%);
+      width: 20px;
+      height: 20px;
+      background: pink;
       border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-      box-shadow: 0 0 8px #ff69b4;
+      filter: drop-shadow(0 0 2px #ff8fb1);
       animation: floatFlower 7s linear infinite;
-      z-index: 4;
-      opacity: 0.8;
     }
+
     .flower::before,
     .flower::after {
       content: "";
       position: absolute;
-      width: 25px;
-      height: 25px;
-      background: radial-gradient(circle at center, #ff69b4 30%, #ff1493 70%);
-      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-      box-shadow: 0 0 8px #ff69b4;
+      background: pink;
+      border-radius: 50%;
     }
+
     .flower::before {
-      top: -12px;
-      left: 8px;
+      width: 20px;
+      height: 20px;
+      top: -10px;
+      left: 0;
     }
+
     .flower::after {
-      top: 8px;
-      left: -12px;
+      width: 20px;
+      height: 20px;
+      left: -10px;
+      top: 0;
     }
 
     @keyframes floatFlower {
       0% {
         transform: translateY(0) rotate(0deg);
-        opacity: 0.8;
+        opacity: 1;
       }
       100% {
-        transform: translateY(-110vh) rotate(360deg);
+        transform: translateY(-100vh) rotate(360deg);
         opacity: 0;
-      }
-    }
-
-    /* Container da imagem final do coração */
-    #finalImage {
-      display: none;
-      position: relative;
-      z-index: 5;
-      width: 100vw;
-      height: 100vh;
-      background: radial-gradient(circle, #ff005c 0%, #4d0019 70%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      color: white;
-      font-family: 'Great Vibes', cursive;
-      font-size: 5em;
-      text-shadow: 0 0 20px #ff8fb1;
-    }
-
-    /* Coração grande SVG para o final */
-    #finalImage svg {
-      width: 200px;
-      height: 200px;
-      fill: #ff005c;
-      filter: drop-shadow(0 0 8px #ff69b4);
-      margin-bottom: 20px;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 8px #ff69b4);
-      }
-      50% {
-        transform: scale(1.1);
-        filter: drop-shadow(0 0 16px #ff69b4);
       }
     }
   </style>
@@ -249,17 +216,6 @@
   <div class="container" id="messageContainer">
     <p id="messageText"></p>
     <p class="signature">Com todo o meu amor,<br>Raul</p>
-  </div>
-
-  <!-- Container para a imagem final do coração -->
-  <div id="finalImage">
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42
-      3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5
-      3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55
-      11.54L12 21.35z"></path>
-    </svg>
-    <div>EU TE AMO</div>
   </div>
 
   <audio id="romanticAudio" loop>
@@ -291,86 +247,101 @@ Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre 
     const messageContainer = document.getElementById('messageContainer');
     const messageText = document.getElementById('messageText');
     const audio = document.getElementById('romanticAudio');
-    const finalImage = document.getElementById('finalImage');
-
-    let heartsInterval, flowersInterval;
 
     startButton.addEventListener('click', () => {
       audio.play().then(() => {
         startScreen.style.display = 'none';
         messageContainer.style.display = 'block';
-        typeMessage(message, messageText).then(() => {
-          // Ao terminar de digitar o texto, remover container e mostrar a imagem final
+        typeMessage(message, messageText, () => {
+          // Quando terminar o texto...
           messageContainer.style.display = 'none';
-          stopAnimations();
-          showFinalImage();
+
+          // Criar a imagem grande de coração com texto "EU TE AMO"
+          const loveScreen = document.createElement('div');
+          loveScreen.id = 'loveScreen';
+          loveScreen.style.position = 'fixed';
+          loveScreen.style.top = 0;
+          loveScreen.style.left = 0;
+          loveScreen.style.width = '100vw';
+          loveScreen.style.height = '100vh';
+          loveScreen.style.background = 'radial-gradient(circle, #ff5f84, #a3003f)';
+          loveScreen.style.display = 'flex';
+          loveScreen.style.alignItems = 'center';
+          loveScreen.style.justifyContent = 'center';
+          loveScreen.style.flexDirection = 'column';
+          loveScreen.style.zIndex = 10;
+          loveScreen.style.color = 'white';
+          loveScreen.style.fontFamily = "'Great Vibes', cursive";
+          loveScreen.style.fontSize = '6em';
+          loveScreen.style.textShadow = '0 0 20px #ffb6c1';
+
+          // Criar coração SVG
+          const svgHeart = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svgHeart.setAttribute("viewBox", "0 0 32 29.6");
+          svgHeart.style.width = '200px';
+          svgHeart.style.height = '200px';
+          svgHeart.style.marginBottom = '20px';
+
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("fill", "#ff4f7d");
+          path.setAttribute("d", "M23.6,0c-3,0-5.6,1.9-7,4.6C14,1.9,11.4,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z");
+          svgHeart.appendChild(path);
+          loveScreen.appendChild(svgHeart);
+
+          // Texto
+          const loveText = document.createElement('div');
+          loveText.textContent = "EU TE AMO";
+          loveScreen.appendChild(loveText);
+
+          document.body.appendChild(loveScreen);
+
+          // Iniciar as animações de corações e flores após mostrar a tela
+          generateHearts();
+          generateFlowers();
         });
-        startAnimations();
       }).catch(err => {
         alert('Erro ao iniciar a música: ' + err.message);
       });
     });
 
-    // Função tipo "async" que resolve quando termina de digitar
-    function typeMessage(text, element) {
-      return new Promise((resolve) => {
-        let index = 0;
-        function type() {
-          if (index < text.length) {
-            element.innerHTML += text.charAt(index);
-            index++;
-            setTimeout(type, 50);
-          } else {
-            resolve();
-          }
+    function typeMessage(text, element, callback) {
+      let index = 0;
+      function type() {
+        if (index < text.length) {
+          element.innerHTML += text.charAt(index);
+          index++;
+          setTimeout(type, 50);
+        } else {
+          if (callback) callback();
         }
-        element.innerHTML = ''; // limpa antes de começar
-        type();
-      });
+      }
+      type();
     }
 
-    // Função para criar corações e flores continuamente
-    function startAnimations() {
-      heartsInterval = setInterval(() => {
-        createHeart();
+    function generateHearts() {
+      setInterval(() => {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => {
+          heart.remove();
+        }, 5000);
       }, 500);
-
-      flowersInterval = setInterval(() => {
-        createFlower();
-      }, 1000);
     }
 
-    function stopAnimations() {
-      clearInterval(heartsInterval);
-      clearInterval(flowersInterval);
-      // Remove todos os corações e flores da página
-      document.querySelectorAll('.heart, .flower').forEach(el => el.remove());
-    }
-
-    function createHeart() {
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-      document.body.appendChild(heart);
-      setTimeout(() => {
-        heart.remove();
-      }, 5000);
-    }
-
-    function createFlower() {
-      const flower = document.createElement('div');
-      flower.classList.add('flower');
-      flower.style.left = Math.random() * 100 + 'vw';
-      flower.style.animationDuration = (Math.random() * 4 + 3) + 's';
-      document.body.appendChild(flower);
-      setTimeout(() => {
-        flower.remove();
-      }, 7000);
-    }
-
-    function showFinalImage() {
-      finalImage.style.display = 'flex';
+    function generateFlowers() {
+      setInterval(() => {
+        const flower = document.createElement('div');
+        flower.classList.add('flower');
+        flower.style.left = Math.random() * 100 + 'vw';
+        flower.style.animationDuration = (Math.random() * 4 + 3) + 's';
+        document.body.appendChild(flower);
+        setTimeout(() => {
+          flower.remove();
+        }, 7000);
+      }, 700);
     }
   </script>
 </body>
