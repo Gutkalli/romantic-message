@@ -7,25 +7,47 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins&display=swap');
 
-    body {
+    * {
       margin: 0;
       padding: 0;
-      height: 100vh;
-      background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at center, #5a002a 0%, #1a000f 100%);
       color: white;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .intro, .main {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
+      transition: opacity 1s ease;
+      z-index: 1;
     }
 
-    h1 {
+    .intro {
+      background: transparent;
+      z-index: 2;
+    }
+
+    .intro h1 {
       font-family: 'Great Vibes', cursive;
-      font-size: 2em;
-      margin-bottom: 20px;
+      font-size: 2.5em;
+      color: #ffcbdc;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #ff4f7d;
     }
 
     #start-btn {
@@ -34,43 +56,89 @@
       border-radius: 50%;
       width: 100px;
       height: 100px;
+      font-size: 2.5em;
       color: white;
-      font-size: 2em;
       cursor: pointer;
+      animation: pulse 1.5s infinite;
       box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
-      transition: transform 0.3s ease;
     }
 
-    #start-btn:hover {
-      transform: scale(1.1);
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 0, 0, 0.7); }
+      50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(255, 0, 0, 1); }
+      100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 0, 0, 0.7); }
+    }
+
+    .main {
+      opacity: 0;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 30px 20px;
+      overflow-y: auto;
+      z-index: 1;
+    }
+
+    .main.show {
+      opacity: 1;
+    }
+
+    .frame {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 2px solid #ffcbdc;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 0 15px #ff4f7d;
+      position: relative;
+      z-index: 3;
+    }
+
+    #message {
+      font-size: 1.4em;
+      white-space: pre-line;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .signature {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2em;
+      margin-top: 50px;
+      color: #ffcbdc;
+      text-align: center;
+      display: block;
     }
 
     .heart {
       position: absolute;
-      width: 15px;
-      height: 15px;
+      width: 25px;
+      height: 25px;
       background: red;
       transform: rotate(45deg);
       animation: floatUp 8s linear infinite;
+      z-index: 0;
+      opacity: 0.7;
+      box-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
     }
 
     .heart::before,
     .heart::after {
       content: "";
       position: absolute;
-      width: 15px;
-      height: 15px;
+      width: 25px;
+      height: 25px;
       background: red;
       border-radius: 50%;
     }
 
     .heart::before {
-      top: -7.5px;
+      top: -12.5px;
       left: 0;
     }
 
     .heart::after {
-      left: -7.5px;
+      left: -12.5px;
       top: 0;
     }
 
@@ -80,70 +148,96 @@
         opacity: 1;
       }
       100% {
-        transform: translateY(-100vh) rotate(45deg);
+        transform: translateY(-120vh) rotate(45deg);
         opacity: 0;
       }
-    }
-
-    #message {
-      font-size: 1.3em;
-      max-width: 600px;
-      margin-top: 30px;
-      opacity: 0;
-      transition: opacity 2s ease-in-out;
     }
   </style>
 </head>
 <body>
 
-  <h1>&lt;3 Uma Mensagem Romântica para Ti &lt;3</h1>
-  <button id="start-btn">❤️</button>
-  <div id="message"></div>
+  <!-- TELA DE INTRODUÇÃO -->
+  <div class="intro" id="intro">
+    <h1>Uma Mensagem Romântica para Ti</h1>
+    <button id="start-btn">❤️</button>
+  </div>
 
-  <!-- Música corrigida -->
+  <!-- TELA COM TEXTO -->
+  <div class="main" id="main-content">
+    <div class="frame">
+      <div id="message"></div>
+      <div id="assinatura" class="signature"></div>
+    </div>
+  </div>
+
+  <!-- ÁUDIO -->
   <audio id="music" src="Sentimental.mp3" preload="auto"></audio>
 
   <script>
     const startBtn = document.getElementById('start-btn');
-    const messageDiv = document.getElementById('message');
+    const intro = document.getElementById('intro');
+    const main = document.getElementById('main-content');
     const music = document.getElementById('music');
+    const message = document.getElementById('message');
+    const assinatura = document.getElementById('assinatura');
 
-    const messageText = `No silêncio da noite, quando as estrelas sussurram segredos ao luar, 
-    o meu coração encontra-se em sintonia com a melodia do teu amor. 
-    És a melodia que acalma a minha alma, a luz que ilumina o meu caminho 
-    e a razão pela qual o meu coração bate mais forte a cada dia.
+    const texto = `No silêncio da noite, quando as estrelas sussurram segredos ao luar,  
+o meu coração encontra-se em sintonia com a melodia do teu amor.  
+É uma melodia que acalma a minha alma, uma luz que ilumina o meu caminho  
+e a razão pela qual o meu coração bate mais forte a cada dia.  
 
-    Tal como uma rosa desabrocha ao primeiro raio de sol, o meu amor por ti 
-    floresce a cada amanhecer.`;
+Tal como uma rosa desabrocha na primavera,  
+o nosso amor floresce com o tempo, nutrido pela paciência,  
+pela compreensão e pela devoção.  
+Cada pétala representa uma memória preciosa,  
+um momento adquirido no tempo em que nossos corações dançavam em uníssono.  
 
+Que esta mensagem sirva de testemunho do meu afeto eterno por ti.  
+Que te lembre do calor dos nossos abraços,  
+da doçura dos nossos beijos  
+e da alegria das nossas gargalhadas partilhadas.  
+É uma obra-prima que a vida pintou na tela do meu coração.`;
+
+    const assinaturaTexto = `Com todo o meu amor,\nRaul`;
+
+    function typeMessage(text, el, speed = 50, callback = null) {
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          el.innerHTML += text.charAt(i) === "\n" ? "<br>" : text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        } else if (callback) {
+          callback();
+        }
+      }
+      type();
+    }
+
+    startBtn.addEventListener('click', () => {
+      intro.style.opacity = 0;
+      setTimeout(() => {
+        intro.style.display = 'none';
+        main.classList.add('show');
+        typeMessage(texto, message, 50, () => {
+          typeMessage(assinaturaTexto, assinatura, 70);
+        });
+        music.play().catch(() => {});
+      }, 1000);
+    });
+
+    // CORAÇÕES FLUTUANTES
     function createHeart() {
       const heart = document.createElement('div');
       heart.classList.add('heart');
       heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = 5 + Math.random() * 5 + 's';
+      heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+      heart.style.transform = `rotate(45deg) scale(${0.8 + Math.random() * 0.4})`;
       document.body.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 10000);
+      setTimeout(() => heart.remove(), 12000);
     }
 
-    let textIndex = 0;
-
-    function showTextGradually(text, target) {
-      const interval = setInterval(() => {
-        target.innerHTML += text[textIndex];
-        textIndex++;
-        if (textIndex >= text.length) clearInterval(interval);
-      }, 50);
-    }
-
-    startBtn.addEventListener('click', () => {
-      music.play();
-      startBtn.style.display = 'none';
-      messageDiv.style.opacity = 1;
-      showTextGradually(messageText, messageDiv);
-    });
-
-    setInterval(createHeart, 300);
+    setInterval(createHeart, 250);
   </script>
 
 </body>
