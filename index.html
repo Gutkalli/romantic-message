@@ -3,33 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mensagem Romântica</title>
+  <title>Uma Mensagem Romântica para Ti</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins&family=Sacramento&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display&family=Poppins&display=swap');
-
     body {
       margin: 0;
       padding: 0;
-      background: radial-gradient(ellipse at bottom, #4d0019 0%, #000000 100%);
-      color: #ffe6eb;
+      min-height: 100vh;
       font-family: 'Poppins', sans-serif;
+      background: radial-gradient(ellipse at bottom, #4d0019 0%, #000000 100%);
+      color: #fff0f5;
       overflow: hidden;
+      position: relative;
     }
 
     .stars {
       position: absolute;
       width: 100%;
       height: 100%;
-      z-index: 1;
+      background: transparent;
+      z-index: 0;
     }
 
     .star {
       position: absolute;
       width: 2px;
       height: 2px;
-      background: white;
+      background: #ffffff;
       border-radius: 50%;
-      animation: twinkle 2s infinite ease-in-out;
+      animation: twinkle 2s infinite;
       opacity: 0.8;
     }
 
@@ -56,6 +58,7 @@
       font-family: 'Great Vibes', cursive;
       font-size: 3.5em;
       color: #ffccda;
+      margin-bottom: 30px;
       text-shadow: 0 0 8px #ff4f7d;
     }
 
@@ -64,7 +67,7 @@
       line-height: 1.7;
       color: #ffe6eb;
       text-shadow: 0 0 4px #a60a3d;
-      white-space: pre-wrap;
+      margin-bottom: 25px;
     }
 
     .signature {
@@ -76,17 +79,25 @@
     }
 
     #startScreen {
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background: radial-gradient(ellipse at bottom, #4d0019 0%, #000000 100%);
-      z-index: 3;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      z-index: 3;
+    }
+
+    #startScreen h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.5em;
+      color: #ffccda;
+      margin-bottom: 30px;
+      text-shadow: 0 0 8px #ff4f7d;
     }
 
     #startButton {
@@ -99,23 +110,17 @@
       border-radius: 12px;
       cursor: pointer;
       box-shadow: 0 0 10px #ffb6c1;
-      transition: background-color 0.3s ease;
-    }
-
-    #startButton:hover {
-      background-color: #ff3b67;
     }
 
     .heart {
-      position: fixed;
+      position: absolute;
       width: 20px;
       height: 20px;
       background: red;
       transform: rotate(45deg);
-      animation: float 6s linear forwards;
-      filter: drop-shadow(0 0 3px #ff4f7d);
-      z-index: 0;
-      pointer-events: none;
+      animation: float 6s linear infinite;
+      opacity: 0.8;
+      z-index: 1;
     }
 
     .heart::before,
@@ -144,9 +149,36 @@
         opacity: 1;
       }
       100% {
-        transform: translateY(-120vh) rotate(45deg);
+        transform: translateY(-100vh) rotate(45deg);
         opacity: 0;
       }
+    }
+
+    #finalScreen {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: radial-gradient(circle, #ff0066 0%, #33001a 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5;
+      flex-direction: column;
+    }
+
+    #finalScreen .love-heart {
+      font-family: 'Sacramento', cursive;
+      font-size: 4em;
+      color: white;
+      text-shadow: 0 0 10px red;
+      background: pink;
+      padding: 60px 40px;
+      border-radius: 50%;
+      box-shadow: 0 0 60px red;
+      text-align: center;
     }
   </style>
 </head>
@@ -163,9 +195,13 @@
     <p class="signature">Com todo o meu amor,<br>Raul</p>
   </div>
 
+  <div id="finalScreen">
+    <div class="love-heart">EU TE AMO</div>
+  </div>
+
   <audio id="romanticAudio" loop>
     <source src="Sentimental.mp3" type="audio/mpeg" />
-    Seu navegador não suporta áudio.
+    Seu navegador não suporta o elemento de áudio.
   </audio>
 
   <script>
@@ -189,96 +225,46 @@ Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre 
     const startScreen = document.getElementById('startScreen');
     const messageContainer = document.getElementById('messageContainer');
     const messageText = document.getElementById('messageText');
+    const finalScreen = document.getElementById('finalScreen');
     const audio = document.getElementById('romanticAudio');
 
     startButton.addEventListener('click', () => {
-      audio.play().catch(() => alert("Clique para ativar o áudio."));
-
-      startScreen.style.display = 'none';
-      messageContainer.style.display = 'block';
-
-      typeMessage(message, messageText, () => {
-        messageContainer.style.display = 'none';
-
-        const loveScreen = document.createElement('div');
-        loveScreen.style.position = 'fixed';
-        loveScreen.style.top = 0;
-        loveScreen.style.left = 0;
-        loveScreen.style.width = '100%';
-        loveScreen.style.height = '100%';
-        loveScreen.style.display = 'flex';
-        loveScreen.style.alignItems = 'center';
-        loveScreen.style.justifyContent = 'center';
-        loveScreen.style.flexDirection = 'column';
-        loveScreen.style.background = 'radial-gradient(ellipse at center, #4d0019 0%, #000000 100%)';
-
-        const heart = document.createElement('div');
-        heart.style.width = '200px';
-        heart.style.height = '200px';
-        heart.style.background = 'red';
-        heart.style.transform = 'rotate(45deg)';
-        heart.style.position = 'relative';
-        heart.style.filter = 'drop-shadow(0 0 6px red)';
-        heart.style.marginBottom = '30px';
-
-        const before = document.createElement('div');
-        before.style.width = '200px';
-        before.style.height = '200px';
-        before.style.background = 'red';
-        before.style.borderRadius = '50%';
-        before.style.position = 'absolute';
-        before.style.top = '-100px';
-        before.style.left = '0';
-
-        const after = document.createElement('div');
-        after.style.width = '200px';
-        after.style.height = '200px';
-        after.style.background = 'red';
-        after.style.borderRadius = '50%';
-        after.style.position = 'absolute';
-        after.style.top = '0';
-        after.style.left = '-100px';
-
-        heart.appendChild(before);
-        heart.appendChild(after);
-
-        const text = document.createElement('div');
-        text.textContent = 'EU TE AMO';
-        text.style.fontFamily = `'Playfair Display', serif`;
-        text.style.color = '#ffccd5';
-        text.style.fontSize = '3em';
-        text.style.textShadow = '0 0 10px #ff4f7d';
-        text.style.textAlign = 'center';
-
-        loveScreen.appendChild(heart);
-        loveScreen.appendChild(text);
-        document.body.appendChild(loveScreen);
+      audio.play().then(() => {
+        startScreen.style.display = 'none';
+        messageContainer.style.display = 'block';
+        typeMessage(message, messageText, () => {
+          messageContainer.style.display = 'none';
+          finalScreen.style.display = 'flex';
+        });
+      }).catch(err => {
+        alert('Erro ao iniciar a música: ' + err.message);
       });
-
-      setInterval(() => {
-        const el = createHeart();
-        document.body.appendChild(el);
-        setTimeout(() => el.remove(), 6000);
-      }, 300);
     });
 
     function typeMessage(text, element, callback) {
       let index = 0;
-      const interval = setInterval(() => {
-        element.textContent += text[index++];
-        if (index >= text.length) {
-          clearInterval(interval);
-          if (callback) callback();
+      function type() {
+        if (index < text.length) {
+          element.innerHTML += text.charAt(index);
+          index++;
+          setTimeout(type, 50);
+        } else {
+          callback();
         }
-      }, 40);
+      }
+      type();
     }
 
     function createHeart() {
       const heart = document.createElement('div');
       heart.classList.add('heart');
       heart.style.left = Math.random() * 100 + 'vw';
-      return heart;
+      heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
     }
+
+    setInterval(createHeart, 300);
   </script>
 </body>
 </html>
