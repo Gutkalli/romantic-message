@@ -3,37 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Uma Mensagem Romântica para Ti</title>
+  <title>Mensagem Romântica</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display&family=Poppins&display=swap');
 
     body {
       margin: 0;
       padding: 0;
-      min-height: 100vh;
-      font-family: 'Poppins', sans-serif;
       background: radial-gradient(ellipse at bottom, #4d0019 0%, #000000 100%);
-      color: #fff0f5;
+      color: #ffe6eb;
+      font-family: 'Poppins', sans-serif;
       overflow: hidden;
-      position: relative;
     }
 
     .stars {
       position: absolute;
       width: 100%;
       height: 100%;
-      background: transparent;
       z-index: 1;
-      overflow: hidden;
     }
 
     .star {
       position: absolute;
       width: 2px;
       height: 2px;
-      background: #ffffff;
+      background: white;
       border-radius: 50%;
-      animation: twinkle 2s infinite;
+      animation: twinkle 2s infinite ease-in-out;
       opacity: 0.8;
     }
 
@@ -60,7 +56,6 @@
       font-family: 'Great Vibes', cursive;
       font-size: 3.5em;
       color: #ffccda;
-      margin-bottom: 30px;
       text-shadow: 0 0 8px #ff4f7d;
     }
 
@@ -69,7 +64,6 @@
       line-height: 1.7;
       color: #ffe6eb;
       text-shadow: 0 0 4px #a60a3d;
-      margin-bottom: 25px;
       white-space: pre-wrap;
     }
 
@@ -82,25 +76,17 @@
     }
 
     #startScreen {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       background: radial-gradient(ellipse at bottom, #4d0019 0%, #000000 100%);
+      z-index: 3;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 3;
-    }
-
-    #startScreen h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 3.5em;
-      color: #ffccda;
-      margin-bottom: 30px;
-      text-shadow: 0 0 8px #ff4f7d;
     }
 
     #startButton {
@@ -121,13 +107,15 @@
     }
 
     .heart {
-      position: absolute;
+      position: fixed;
       width: 20px;
       height: 20px;
       background: red;
       transform: rotate(45deg);
-      animation: float 5s linear infinite;
+      animation: float 6s linear forwards;
       filter: drop-shadow(0 0 3px #ff4f7d);
+      z-index: 0;
+      pointer-events: none;
     }
 
     .heart::before,
@@ -156,50 +144,7 @@
         opacity: 1;
       }
       100% {
-        transform: translateY(-100vh) rotate(45deg);
-        opacity: 0;
-      }
-    }
-
-    .flower {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: pink;
-      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-      filter: drop-shadow(0 0 2px #ff8fb1);
-      animation: floatFlower 7s linear infinite;
-    }
-
-    .flower::before,
-    .flower::after {
-      content: "";
-      position: absolute;
-      background: pink;
-      border-radius: 50%;
-    }
-
-    .flower::before {
-      width: 20px;
-      height: 20px;
-      top: -10px;
-      left: 0;
-    }
-
-    .flower::after {
-      width: 20px;
-      height: 20px;
-      left: -10px;
-      top: 0;
-    }
-
-    @keyframes floatFlower {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-100vh) rotate(360deg);
+        transform: translateY(-120vh) rotate(45deg);
         opacity: 0;
       }
     }
@@ -220,11 +165,10 @@
 
   <audio id="romanticAudio" loop>
     <source src="Sentimental.mp3" type="audio/mpeg" />
-    Seu navegador não suporta o elemento de áudio.
+    Seu navegador não suporta áudio.
   </audio>
 
   <script>
-    // Criar estrelas aleatórias
     const starsContainer = document.getElementById('stars');
     for (let i = 0; i < 100; i++) {
       const star = document.createElement('div');
@@ -235,7 +179,6 @@
       starsContainer.appendChild(star);
     }
 
-    // Texto da mensagem
     const message = `No silêncio da noite, quando as estrelas sussurram segredos ao luar, o meu coração encontra-se em sintonia com a melodia do teu amor. É uma melodia que acalma a minha alma, uma luz que ilumina o meu caminho e a razão pela qual o meu coração bate mais forte a cada dia.
 
 Tal como uma rosa desabrocha na primavera, o nosso amor floresce com o tempo, nutrido pela paciência, pela compreensão e pela devoção. Cada pétala representa uma memória preciosa, um momento adquirido no tempo em que nossos corações dançavam em uníssono.
@@ -249,99 +192,92 @@ Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre 
     const audio = document.getElementById('romanticAudio');
 
     startButton.addEventListener('click', () => {
-      audio.play().then(() => {
-        startScreen.style.display = 'none';
-        messageContainer.style.display = 'block';
-        typeMessage(message, messageText, () => {
-          // Quando terminar o texto...
-          messageContainer.style.display = 'none';
+      audio.play().catch(() => alert("Clique para ativar o áudio."));
 
-          // Criar a imagem grande de coração com texto "EU TE AMO"
-          const loveScreen = document.createElement('div');
-          loveScreen.id = 'loveScreen';
-          loveScreen.style.position = 'fixed';
-          loveScreen.style.top = 0;
-          loveScreen.style.left = 0;
-          loveScreen.style.width = '100vw';
-          loveScreen.style.height = '100vh';
-          loveScreen.style.background = 'radial-gradient(circle, #ff5f84, #a3003f)';
-          loveScreen.style.display = 'flex';
-          loveScreen.style.alignItems = 'center';
-          loveScreen.style.justifyContent = 'center';
-          loveScreen.style.flexDirection = 'column';
-          loveScreen.style.zIndex = 10;
-          loveScreen.style.color = 'white';
-          loveScreen.style.fontFamily = "'Great Vibes', cursive";
-          loveScreen.style.fontSize = '6em';
-          loveScreen.style.textShadow = '0 0 20px #ffb6c1';
+      startScreen.style.display = 'none';
+      messageContainer.style.display = 'block';
 
-          // Criar coração SVG
-          const svgHeart = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-          svgHeart.setAttribute("viewBox", "0 0 32 29.6");
-          svgHeart.style.width = '200px';
-          svgHeart.style.height = '200px';
-          svgHeart.style.marginBottom = '20px';
+      typeMessage(message, messageText, () => {
+        messageContainer.style.display = 'none';
 
-          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          path.setAttribute("fill", "#ff4f7d");
-          path.setAttribute("d", "M23.6,0c-3,0-5.6,1.9-7,4.6C14,1.9,11.4,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z");
-          svgHeart.appendChild(path);
-          loveScreen.appendChild(svgHeart);
+        const loveScreen = document.createElement('div');
+        loveScreen.style.position = 'fixed';
+        loveScreen.style.top = 0;
+        loveScreen.style.left = 0;
+        loveScreen.style.width = '100%';
+        loveScreen.style.height = '100%';
+        loveScreen.style.display = 'flex';
+        loveScreen.style.alignItems = 'center';
+        loveScreen.style.justifyContent = 'center';
+        loveScreen.style.flexDirection = 'column';
+        loveScreen.style.background = 'radial-gradient(ellipse at center, #4d0019 0%, #000000 100%)';
 
-          // Texto
-          const loveText = document.createElement('div');
-          loveText.textContent = "EU TE AMO";
-          loveScreen.appendChild(loveText);
+        const heart = document.createElement('div');
+        heart.style.width = '200px';
+        heart.style.height = '200px';
+        heart.style.background = 'red';
+        heart.style.transform = 'rotate(45deg)';
+        heart.style.position = 'relative';
+        heart.style.filter = 'drop-shadow(0 0 6px red)';
+        heart.style.marginBottom = '30px';
 
-          document.body.appendChild(loveScreen);
+        const before = document.createElement('div');
+        before.style.width = '200px';
+        before.style.height = '200px';
+        before.style.background = 'red';
+        before.style.borderRadius = '50%';
+        before.style.position = 'absolute';
+        before.style.top = '-100px';
+        before.style.left = '0';
 
-          // Iniciar as animações de corações e flores após mostrar a tela
-          generateHearts();
-          generateFlowers();
-        });
-      }).catch(err => {
-        alert('Erro ao iniciar a música: ' + err.message);
+        const after = document.createElement('div');
+        after.style.width = '200px';
+        after.style.height = '200px';
+        after.style.background = 'red';
+        after.style.borderRadius = '50%';
+        after.style.position = 'absolute';
+        after.style.top = '0';
+        after.style.left = '-100px';
+
+        heart.appendChild(before);
+        heart.appendChild(after);
+
+        const text = document.createElement('div');
+        text.textContent = 'EU TE AMO';
+        text.style.fontFamily = `'Playfair Display', serif`;
+        text.style.color = '#ffccd5';
+        text.style.fontSize = '3em';
+        text.style.textShadow = '0 0 10px #ff4f7d';
+        text.style.textAlign = 'center';
+
+        loveScreen.appendChild(heart);
+        loveScreen.appendChild(text);
+        document.body.appendChild(loveScreen);
       });
+
+      setInterval(() => {
+        const el = createHeart();
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 6000);
+      }, 300);
     });
 
     function typeMessage(text, element, callback) {
       let index = 0;
-      function type() {
-        if (index < text.length) {
-          element.innerHTML += text.charAt(index);
-          index++;
-          setTimeout(type, 50);
-        } else {
+      const interval = setInterval(() => {
+        element.textContent += text[index++];
+        if (index >= text.length) {
+          clearInterval(interval);
           if (callback) callback();
         }
-      }
-      type();
+      }, 40);
     }
 
-    function generateHearts() {
-      setInterval(() => {
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        document.body.appendChild(heart);
-        setTimeout(() => {
-          heart.remove();
-        }, 5000);
-      }, 500);
-    }
-
-    function generateFlowers() {
-      setInterval(() => {
-        const flower = document.createElement('div');
-        flower.classList.add('flower');
-        flower.style.left = Math.random() * 100 + 'vw';
-        flower.style.animationDuration = (Math.random() * 4 + 3) + 's';
-        document.body.appendChild(flower);
-        setTimeout(() => {
-          flower.remove();
-        }, 7000);
-      }, 700);
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      return heart;
     }
   </script>
 </body>
