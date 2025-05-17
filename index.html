@@ -110,14 +110,25 @@
       display: block;
     }
 
+    /* Container dos corações */
+    #hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
     .heart {
       position: absolute;
       width: 25px;
       height: 25px;
       background: red;
       transform: rotate(45deg);
-      animation: floatUp 8s linear infinite;
-      z-index: 0;
+      animation: floatUp 6s linear infinite;
       opacity: 0.7;
       box-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
     }
@@ -148,13 +159,16 @@
         opacity: 1;
       }
       100% {
-        transform: translateY(-120vh) rotate(45deg);
+        transform: translateY(-100vh) rotate(45deg);
         opacity: 0;
       }
     }
   </style>
 </head>
 <body>
+
+  <!-- CORAÇÕES -->
+  <div id="hearts-container"></div>
 
   <!-- TELA DE INTRODUÇÃO -->
   <div class="intro" id="intro">
@@ -233,8 +247,8 @@ e da alegria das nossas gargalhadas partilhadas.
       heart.style.left = Math.random() * 100 + 'vw';
       heart.style.animationDuration = (5 + Math.random() * 5) + 's';
       heart.style.transform = `rotate(45deg) scale(${0.8 + Math.random() * 0.4})`;
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 12000);
+      document.getElementById('hearts-container').appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
     }
 
     setInterval(createHeart, 250);
