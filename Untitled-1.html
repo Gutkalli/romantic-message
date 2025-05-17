@@ -1,141 +1,225 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Uma Mensagem Romântica para Ti</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Uma Mensagem Romântica para Ti</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins&display=swap');
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            background: radial-gradient(ellipse at bottom, #4d0019 0%, #000000 100%);
-            color: #fff0f5;
-            overflow-x: hidden;
-        }
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(ellipse at bottom, #4d0019 0%, #000000 100%);
+      color: #fff0f5;
+      overflow-x: hidden;
+    }
 
-        .stars {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: transparent;
-            z-index: 1;
-            overflow: hidden;
-        }
+    .stars, .hearts {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
 
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: #ffffff;
-            border-radius: 50%;
-            animation: twinkle 2s infinite;
-            opacity: 0.8;
-        }
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #ffffff;
+      border-radius: 50%;
+      animation: twinkle 2s infinite;
+      opacity: 0.8;
+    }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.2; }
-        }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 0.2; }
+    }
 
-        .container {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            margin: 60px auto;
-            padding: 60px 30px;
-            background: rgba(255, 0, 76, 0.1);
-            border-radius: 20px;
-            box-shadow: 0 0 40px rgba(255, 153, 204, 0.3);
-            backdrop-filter: blur(6px);
-            text-align: center;
-        }
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 60px 30px;
+      background: rgba(255, 0, 76, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255, 153, 204, 0.3);
+      backdrop-filter: blur(6px);
+      text-align: center;
+      color: #ffe6eb;
+    }
 
-        h1 {
-            font-family: 'Great Vibes', cursive;
-            font-size: 3.5em;
-            color: #ffccda;
-            margin-bottom: 30px;
-            text-shadow: 0 0 8px #ff4f7d;
-        }
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.5em;
+      color: #ffccda;
+      margin-bottom: 30px;
+      text-shadow: 0 0 8px #ff4f7d;
+    }
 
-        p {
-            font-size: 1.3em;
-            line-height: 1.7;
-            color: #ffe6eb;
-            text-shadow: 0 0 4px #a60a3d;
-            margin-bottom: 25px;
-        }
+    p {
+      font-size: 1.3em;
+      line-height: 1.7;
+      color: #ffe6eb;
+      text-shadow: 0 0 4px #a60a3d;
+      margin-bottom: 25px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
 
-        .signature {
-            font-family: 'Great Vibes', cursive;
-            font-size: 2.3em;
-            color: #ffc0cb;
-            margin-top: 40px;
-            text-shadow: 0 0 6px #ff5e7d;
-        }
+    p.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        #playButton {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #ff5f84;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1em;
-            font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 0 10px #ffb6c1;
-            z-index: 10;
-        }
-    </style>
+    .signature {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.3em;
+      color: #ffc0cb;
+      margin-top: 40px;
+      text-shadow: 0 0 6px #ff5e7d;
+    }
+
+    #startScreen {
+      text-align: center;
+      margin-top: 20vh;
+      z-index: 2;
+      position: relative;
+    }
+
+    #startButton {
+      background-color: #ff5f84;
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ffb6c1;
+      margin-top: 30px;
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #ff5e7d;
+      transform: rotate(45deg);
+      animation: floatUp 6s linear infinite;
+      opacity: 0.8;
+    }
+
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #ff5e7d;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) rotate(45deg);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
+  <div class="stars" id="stars"></div>
+  <div class="hearts" id="hearts"></div>
 
-    <div class="container">
-        <h1>Uma Mensagem Romântica para Ti</h1>
-        <p>No silêncio da noite, quando as estrelas sussurram segredos ao luar, o meu coração encontra-se em sintonia com a melodia do teu amor. É uma melodia que acalma a minha alma, uma luz que ilumina o meu caminho e a razão pela qual o meu coração bate mais forte a cada dia.</p>
-        <p>Tal como uma rosa desabrocha na primavera, o nosso amor floresce com o tempo, nutrido pela paciência, pela compreensão e pela devoção. Cada pétala representa uma memória preciosa, um momento adquirido no tempo em que nossos corações dançavam em uníssono.</p>
-        <p>Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre do calor dos nossos abraços, da doçura dos nossos beijos e da alegria das nossas gargalhadas partilhadas. É uma obra-prima que a vida pintou na tela do meu coração, e serei eternamente grato pela tua presença na minha vida.</p>
-        <p class="signature">Com todo o meu amor,<br>[Raúl]</p>
-    </div>
+  <div id="startScreen">
+    <h1>Uma Mensagem Romântica para Ti</h1>
+    <button id="startButton">❤️ Iniciar</button>
+  </div>
 
-    <button id="playButton">🎵 Tocar Música</button>
+  <div class="container" id="textContainer" style="display: none;">
+    <p>No silêncio da noite, quando as estrelas sussurram segredos ao luar, o meu coração encontra-se em sintonia com a melodia do teu amor. É uma melodia que acalma a minha alma, uma luz que ilumina o meu caminho e a razão pela qual o meu coração bate mais forte a cada dia.</p>
+    <p>Tal como uma rosa desabrocha na primavera, o nosso amor floresce com o tempo, nutrido pela paciência, pela compreensão e pela devoção. Cada pétala representa uma memória preciosa, um momento adquirido no tempo em que nossos corações dançavam em uníssono.</p>
+    <p>Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre do calor dos nossos abraços, da doçura dos nossos beijos e da alegria das nossas gargalhadas partilhadas. É uma obra-prima que a vida pintou na tela do meu coração, e serei eternamente grato pela tua presença na minha vida.</p>
+    <p class="signature">Com todo o meu amor,<br>[Raúl]</p>
+  </div>
 
-    <audio id="romanticAudio" loop>
-        <source src="Sentimental.mp3" type="audio/mpeg" />
-        Seu navegador não suporta o elemento de áudio.
-    </audio>
+  <audio id="romanticAudio" loop>
+    <source src="Sentimental.mp3" type="audio/mpeg" />
+    Seu navegador não suporta o elemento de áudio.
+  </audio>
 
-    <script>
-        // Criar estrelas aleatórias
-        const starsContainer = document.getElementById('stars');
-        for (let i = 0; i < 100; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.animationDuration = (Math.random() * 3 + 2) + 's';
-            starsContainer.appendChild(star);
-        }
+  <script>
+    // Criar estrelas aleatórias
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.top = Math.random() * 100 + '%';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      starsContainer.appendChild(star);
+    }
 
-        // Botão de música
-        const playButton = document.getElementById('playButton');
-        const audio = document.getElementById('romanticAudio');
+    // Criar corações
+    const heartsContainer = document.getElementById('hearts');
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+      heartsContainer.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
 
-        playButton.addEventListener('click', () => {
-            audio.play().then(() => {
-                playButton.style.display = 'none';
-            }).catch(err => {
-                alert('Erro ao iniciar a música: ' + err.message);
-            });
-        });
-    </script>
+    setInterval(createHeart, 600);
+
+    // Controle da tela inicial
+    const startButton = document.getElementById('startButton');
+    const audio = document.getElementById('romanticAudio');
+    const startScreen = document.getElementById('startScreen');
+    const textContainer = document.getElementById('textContainer');
+    const paragraphs = textContainer.querySelectorAll('p');
+
+    function showParagraphsSequentially() {
+      textContainer.style.display = 'block';
+      paragraphs.forEach((p, i) => {
+        setTimeout(() => {
+          p.classList.add('visible');
+        }, i * 1500);
+      });
+    }
+
+    startButton.addEventListener('click', () => {
+      audio.play().then(() => {
+        startScreen.style.display = 'none';
+        showParagraphsSequentially();
+      }).catch(err => {
+        alert('Erro ao iniciar a música: ' + err.message);
+      });
+    });
+  </script>
 </body>
 </html>
