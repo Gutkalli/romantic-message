@@ -70,7 +70,6 @@
       color: #ffe6eb;
       text-shadow: 0 0 4px #a60a3d;
       margin-bottom: 25px;
-      white-space: pre-wrap;
     }
 
     .signature {
@@ -95,6 +94,14 @@
       z-index: 3;
     }
 
+    #startScreen h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.5em;
+      color: #ffccda;
+      margin-bottom: 30px;
+      text-shadow: 0 0 8px #ff4f7d;
+    }
+
     #startButton {
       background-color: #ff5f84;
       color: white;
@@ -113,9 +120,7 @@
       height: 20px;
       background: red;
       transform: rotate(45deg);
-      animation: float 5s linear forwards;
-      pointer-events: none;
-      z-index: 2;
+      animation: float 5s linear infinite;
     }
 
     .heart::before,
@@ -148,105 +153,6 @@
         opacity: 0;
       }
     }
-
-    /* Grande coração com mensagem final */
-    #finalHeart {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 200px;
-      height: 180px;
-      background: red;
-      transform: translate(-50%, -50%) rotate(45deg);
-      border-radius: 100px 100px 0 0;
-      display: none;
-      z-index: 1000;
-      box-shadow: 0 0 30px 8px rgba(255, 0, 76, 0.7);
-      animation: pulseHeart 2.5s ease-in-out infinite;
-    }
-
-    #finalHeart::before,
-    #finalHeart::after {
-      content: "";
-      position: absolute;
-      width: 200px;
-      height: 180px;
-      background: red;
-      border-radius: 100px 100px 0 0;
-      top: 0;
-      left: 100px;
-    }
-
-    #finalHeart::after {
-      left: 0;
-      top: -90px;
-    }
-
-    #finalHeartText {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-45deg);
-      font-family: 'Great Vibes', cursive;
-      font-size: 2.8em;
-      color: white;
-      text-shadow: 0 0 12px #ff6f91;
-      user-select: none;
-      animation: textZoom 2s ease-in-out infinite;
-    }
-
-    @keyframes pulseHeart {
-      0%, 100% {
-        box-shadow: 0 0 30px 8px rgba(255, 0, 76, 0.7);
-      }
-      50% {
-        box-shadow: 0 0 40px 12px rgba(255, 111, 145, 0.9);
-      }
-    }
-
-    @keyframes textZoom {
-      0%, 100% {
-        transform: translate(-50%, -50%) rotate(-45deg) scale(1);
-      }
-      50% {
-        transform: translate(-50%, -50%) rotate(-45deg) scale(1.2);
-      }
-    }
-
-    .sparkle {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background: white;
-      border-radius: 50%;
-      opacity: 0.8;
-      animation: sparkleAnim 2s infinite ease-in-out;
-      pointer-events: none;
-    }
-
-    @keyframes sparkleAnim {
-      0% {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-      }
-      50% {
-        transform: scale(1.5) translateY(-10px);
-        opacity: 0.5;
-      }
-      100% {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .fade-in {
-      animation: fadeIn 2s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
-    }
   </style>
 </head>
 <body>
@@ -258,20 +164,17 @@
   </div>
 
   <div class="container" id="messageContainer">
-    <h1>Uma Mensagem Romântica para Ti</h1>
     <p id="messageText"></p>
-    <p class="signature">Com todo o meu amor,<br>Raúl</p>
-  </div>
-
-  <div id="finalHeart">
-    <div id="finalHeartText">Eu Te Amo</div>
+    <p class="signature">Com todo o meu amor,<br>Raul</p>
   </div>
 
   <audio id="romanticAudio" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/26/audio_9cd7dbac17.mp3?filename=romantic-call-6416.mp3" type="audio/mpeg" />
+    <source src="Sentimental.mp3" type="audio/mpeg" />
+    Seu navegador não suporta o elemento de áudio.
   </audio>
 
   <script>
+    // Criar estrelas aleatórias
     const starsContainer = document.getElementById('stars');
     for (let i = 0; i < 100; i++) {
       const star = document.createElement('div');
@@ -282,93 +185,54 @@
       starsContainer.appendChild(star);
     }
 
+    // Texto da mensagem
     const message = `No silêncio da noite, quando as estrelas sussurram segredos ao luar, o meu coração encontra-se em sintonia com a melodia do teu amor. É uma melodia que acalma a minha alma, uma luz que ilumina o meu caminho e a razão pela qual o meu coração bate mais forte a cada dia.
 
 Tal como uma rosa desabrocha na primavera, o nosso amor floresce com o tempo, nutrido pela paciência, pela compreensão e pela devoção. Cada pétala representa uma memória preciosa, um momento adquirido no tempo em que nossos corações dançavam em uníssono.
 
-Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre do calor dos nossos abraços, da doçura dos nossos beijos e da alegria das nossas gargalhadas partilhadas. É uma obra-prima que a vida pintou na tela do meu coração.`;
+Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre do calor dos nossos abraços, da doçura dos nossos beijos e da alegria das nossas gargalhadas partilhadas. É uma obra-prima que a vida pintou na tela do meu coração, e serei eternamente grato pela tua presença na minha vida.`;
 
     const startButton = document.getElementById('startButton');
     const startScreen = document.getElementById('startScreen');
     const messageContainer = document.getElementById('messageContainer');
     const messageText = document.getElementById('messageText');
     const audio = document.getElementById('romanticAudio');
-    const finalHeart = document.getElementById('finalHeart');
 
-    function generateHeart() {
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
-      document.body.appendChild(heart);
-      setTimeout(() => {
-        heart.remove();
-      }, 5000);
-    }
-
-    let heartsInterval;
-    function startHearts() {
-      heartsInterval = setInterval(generateHeart, 500);
-    }
-
-    function stopHearts() {
-      clearInterval(heartsInterval);
-    }
-
-    function typeMessage(text, element, speed = 40) {
-      return new Promise(resolve => {
-        let index = 0;
-        element.textContent = '';
-        function type() {
-          if (index < text.length) {
-            element.textContent += text.charAt(index);
-            index++;
-            setTimeout(type, speed);
-          } else {
-            resolve();
-          }
-        }
-        type();
+    startButton.addEventListener('click', () => {
+      audio.play().then(() => {
+        startScreen.style.display = 'none';
+        messageContainer.style.display = 'block';
+        typeMessage(message, messageText);
+        generateHearts();
+      }).catch(err => {
+        alert('Erro ao iniciar a música: ' + err.message);
       });
-    }
-
-    function createSparkle() {
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('sparkle');
-
-      const size = Math.random() * 8 + 4;
-      sparkle.style.width = sparkle.style.height = size + 'px';
-
-      const angle = Math.random() * 2 * Math.PI;
-      const radius = 100;
-      const x = Math.cos(angle) * radius + window.innerWidth / 2;
-      const y = Math.sin(angle) * radius + window.innerHeight / 2;
-
-      sparkle.style.left = `${x}px`;
-      sparkle.style.top = `${y}px`;
-
-      document.body.appendChild(sparkle);
-      setTimeout(() => sparkle.remove(), 3000);
-    }
-
-    function showFinalHeartWithEffects() {
-      finalHeart.style.display = 'block';
-      finalHeart.classList.add('fade-in');
-      let sparkleInterval = setInterval(createSparkle, 300);
-      setTimeout(() => clearInterval(sparkleInterval), 10000);
-    }
-
-    startButton.addEventListener('click', async () => {
-      try {
-        await audio.play();
-      } catch (e) {}
-      startScreen.style.display = 'none';
-      messageContainer.style.display = 'block';
-      startHearts();
-      await typeMessage(message, messageText);
-      stopHearts();
-      setTimeout(showFinalHeartWithEffects, 5000);
     });
+
+    function typeMessage(text, element) {
+      let index = 0;
+      function type() {
+        if (index < text.length) {
+          element.innerHTML += text.charAt(index);
+          index++;
+          setTimeout(type, 50);
+        }
+      }
+      type();
+    }
+
+    function generateHearts() {
+      setInterval(() => {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        document.body.appendChild(heart);
+        setTimeout(() => {
+          heart.remove();
+        }, 5000);
+      }, 500);
+    }
   </script>
 </body>
 </html>
