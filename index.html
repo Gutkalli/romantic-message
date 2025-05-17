@@ -2,37 +2,43 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Uma Mensagem Romântica para Ti</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins&display=swap');
 
-    html, body {
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      min-height: 100vh;
+    }
+
+    html, body {
+      height: 100%;
       font-family: 'Poppins', sans-serif;
       background: radial-gradient(ellipse at bottom, #4d0019 0%, #000000 100%);
       color: #fff0f5;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
     .stars, .hearts {
       position: absolute;
       width: 100%;
       height: 100%;
-      z-index: 0;
       overflow: hidden;
+      pointer-events: none;
+    }
+
+    .star, .heart {
+      position: absolute;
+      border-radius: 50%;
     }
 
     .star {
-      position: absolute;
       width: 2px;
       height: 2px;
       background: #ffffff;
-      border-radius: 50%;
       animation: twinkle 2s infinite;
-      opacity: 0.8;
     }
 
     @keyframes twinkle {
@@ -40,113 +46,120 @@
       50% { opacity: 0.2; }
     }
 
-    .container {
-      position: relative;
-      z-index: 2;
-      max-width: 800px;
-      margin: 60px auto;
-      padding: 60px 30px;
-      background: rgba(255, 0, 76, 0.1);
-      border-radius: 20px;
-      box-shadow: 0 0 40px rgba(255, 153, 204, 0.3);
-      backdrop-filter: blur(6px);
-      text-align: center;
-      color: #ffe6eb;
-    }
-
-    h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 3.5em;
-      color: #ffccda;
-      margin-bottom: 30px;
-      text-shadow: 0 0 8px #ff4f7d;
-    }
-
-    p {
-      font-size: 1.3em;
-      line-height: 1.7;
-      color: #ffe6eb;
-      text-shadow: 0 0 4px #a60a3d;
-      margin-bottom: 25px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    p.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .signature {
-      font-family: 'Great Vibes', cursive;
-      font-size: 2.3em;
-      color: #ffc0cb;
-      margin-top: 40px;
-      text-shadow: 0 0 6px #ff5e7d;
-    }
-
-    #startScreen {
-      text-align: center;
-      margin-top: 20vh;
-      z-index: 2;
-      position: relative;
-    }
-
-    #startButton {
-      background-color: #ff5f84;
-      color: white;
-      border: none;
-      padding: 14px 30px;
-      font-size: 1.2em;
-      font-weight: bold;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #ffb6c1;
-      margin-top: 30px;
-    }
-
     .heart {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: #ff5e7d;
+      width: 15px;
+      height: 15px;
+      background-color: #ff4f81;
       transform: rotate(45deg);
-      animation: floatUp 6s linear infinite;
-      opacity: 0.8;
+      animation: floatHeart 8s linear infinite;
     }
 
     .heart::before, .heart::after {
       content: "";
       position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: #ff5e7d;
+      width: 15px;
+      height: 15px;
+      background-color: #ff4f81;
       border-radius: 50%;
     }
 
     .heart::before {
-      top: -10px;
+      top: -7px;
       left: 0;
     }
 
     .heart::after {
-      left: -10px;
+      left: -7px;
       top: 0;
     }
 
-    @keyframes floatUp {
+    @keyframes floatHeart {
       0% {
-        transform: translateY(100vh) rotate(45deg);
-        opacity: 0;
-      }
-      20% {
+        transform: translateY(0) scale(1);
         opacity: 1;
       }
       100% {
-        transform: translateY(-10vh) rotate(45deg);
+        transform: translateY(-100vh) scale(1.5);
         opacity: 0;
       }
+    }
+
+    .start-screen {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+      position: relative;
+      background: transparent;
+      text-align: center;
+    }
+
+    .start-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3em;
+      color: #ffc0cb;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #ff5e7d;
+    }
+
+    #startButton {
+      padding: 15px 30px;
+      background-color: #ff5f84;
+      color: white;
+      border: none;
+      font-size: 1.2em;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ffb6c1;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 40px 20px;
+      background: rgba(255, 0, 76, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255, 153, 204, 0.3);
+      backdrop-filter: blur(6px);
+      text-align: center;
+      display: none;
+    }
+
+    h1, p {
+      opacity: 0;
+      animation: fadeInUp 1s forwards;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5em;
+      color: #ffccda;
+      margin-bottom: 20px;
+      text-shadow: 0 0 8px #ff4f7d;
+    }
+
+    p {
+      font-size: 1.2em;
+      line-height: 1.6;
+      color: #ffe6eb;
+      text-shadow: 0 0 4px #a60a3d;
+      margin-bottom: 20px;
+    }
+
+    .signature {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2em;
+      color: #ffc0cb;
+      margin-top: 30px;
+      text-shadow: 0 0 6px #ff5e7d;
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -154,70 +167,63 @@
   <div class="stars" id="stars"></div>
   <div class="hearts" id="hearts"></div>
 
-  <div id="startScreen">
-    <h1>Uma Mensagem Romântica para Ti</h1>
-    <button id="startButton">❤️ Iniciar</button>
+  <div class="start-screen" id="startScreen">
+    <div class="start-title">Uma Mensagem Romântica para Ti</div>
+    <button id="startButton">Começar</button>
   </div>
 
-  <div class="container" id="textContainer" style="display: none;">
-    <p>No silêncio da noite, quando as estrelas sussurram segredos ao luar, o meu coração encontra-se em sintonia com a melodia do teu amor. É uma melodia que acalma a minha alma, uma luz que ilumina o meu caminho e a razão pela qual o meu coração bate mais forte a cada dia.</p>
-    <p>Tal como uma rosa desabrocha na primavera, o nosso amor floresce com o tempo, nutrido pela paciência, pela compreensão e pela devoção. Cada pétala representa uma memória preciosa, um momento adquirido no tempo em que nossos corações dançavam em uníssono.</p>
-    <p>Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre do calor dos nossos abraços, da doçura dos nossos beijos e da alegria das nossas gargalhadas partilhadas. É uma obra-prima que a vida pintou na tela do meu coração, e serei eternamente grato pela tua presença na minha vida.</p>
-    <p class="signature">Com todo o meu amor,<br>[Raúl]</p>
+  <div class="container" id="messageContainer">
+    <h1 style="animation-delay: 0.2s">Uma Mensagem Romântica para Ti</h1>
+    <p style="animation-delay: 0.6s">No silêncio da noite, quando as estrelas sussurram segredos ao luar, o meu coração encontra-se em sintonia com a melodia do teu amor...</p>
+    <p style="animation-delay: 1s">Tal como uma rosa desabrocha na primavera, o nosso amor floresce com o tempo, nutrido pela paciência, pela compreensão e pela devoção...</p>
+    <p style="animation-delay: 1.4s">Que esta mensagem sirva de testemunho do meu afeto eterno por ti. Que te lembre do calor dos nossos abraços, da doçura dos nossos beijos...</p>
+    <p class="signature" style="animation-delay: 1.8s">Com todo o meu amor,<br>Raul</p>
   </div>
 
   <audio id="romanticAudio" loop>
-    <source src="Sentimental.mp3" type="audio/mpeg" />
+    <source src="Sentimental.mp3" type="audio/mpeg">
     Seu navegador não suporta o elemento de áudio.
   </audio>
 
   <script>
-    // Criar estrelas aleatórias
+    // Estrelas
     const starsContainer = document.getElementById('stars');
     for (let i = 0; i < 100; i++) {
       const star = document.createElement('div');
-      star.classList.add('star');
+      star.className = 'star';
       star.style.top = Math.random() * 100 + '%';
       star.style.left = Math.random() * 100 + '%';
-      star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      star.style.animationDuration = (Math.random() * 2 + 2) + 's';
       starsContainer.appendChild(star);
     }
 
-    // Criar corações
+    // Corações
     const heartsContainer = document.getElementById('hearts');
-    function createHeart() {
+    setInterval(() => {
       const heart = document.createElement('div');
-      heart.classList.add('heart');
+      heart.className = 'heart';
       heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+      heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
       heartsContainer.appendChild(heart);
-      setTimeout(() => heart.remove(), 6000);
-    }
+      setTimeout(() => heart.remove(), 8000);
+    }, 500);
 
-    setInterval(createHeart, 600);
-
-    // Controle da tela inicial
+    // Iniciar mensagem
     const startButton = document.getElementById('startButton');
     const audio = document.getElementById('romanticAudio');
     const startScreen = document.getElementById('startScreen');
-    const textContainer = document.getElementById('textContainer');
-    const paragraphs = textContainer.querySelectorAll('p');
-
-    function showParagraphsSequentially() {
-      textContainer.style.display = 'block';
-      paragraphs.forEach((p, i) => {
-        setTimeout(() => {
-          p.classList.add('visible');
-        }, i * 1500);
-      });
-    }
+    const messageContainer = document.getElementById('messageContainer');
 
     startButton.addEventListener('click', () => {
       audio.play().then(() => {
         startScreen.style.display = 'none';
-        showParagraphsSequentially();
-      }).catch(err => {
-        alert('Erro ao iniciar a música: ' + err.message);
+        messageContainer.style.display = 'block';
+        // Inicia animações com atraso
+        const elements = messageContainer.querySelectorAll('h1, p');
+        elements.forEach(el => {
+          const delay = el.style.animationDelay || '0s';
+          el.style.animation = `fadeInUp 1s forwards ${delay}`;
+        });
       });
     });
   </script>
