@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -56,6 +55,27 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes fluir {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Container principal */
         .container {
             max-width: 1200px;
@@ -88,11 +108,6 @@
             background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
             background-size: 50px 50px;
             animation: fluir 15s linear infinite;
-        }
-
-        @keyframes fluir {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
         }
 
         header h1 {
@@ -233,6 +248,8 @@
             animation: aparecer 1s ease-out 1.2s both;
             position: relative;
             overflow: hidden;
+            z-index: 10;
+            transition: z-index 0.3s ease;
         }
 
         .secao-especial::after {
@@ -258,6 +275,80 @@
             font-weight: 300;
         }
 
+        .secao-especial.atras {
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease-out;
+            overflow-y: auto;
+        }
+
+        .modal.ativo {
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fff5f9 0%, #ffe6f0 100%);
+            margin: 5% auto 20% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 15px 60px rgba(255, 107, 157, 0.3);
+            animation: slideUp 0.4s ease-out;
+            max-height: none;
+            overflow-y: visible;
+        }
+
+        .fechar {
+            color: var(--cor-primaria);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .fechar:hover,
+        .fechar:focus {
+            color: var(--cor-destaque);
+        }
+
+        .modal-titulo {
+            color: var(--cor-primaria);
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-imagem {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.2);
+        }
+
+        .modal-texto {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+            text-align: justify;
+            margin: 20px 0;
+        }
+
         /* Rodapé */
         footer {
             text-align: center;
@@ -280,87 +371,55 @@
             animation: brilho 2s ease-in-out infinite;
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #fff5f9 0%, #ffe6f0 100%);
-            margin: 10% auto;
-            padding: 40px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 700px;
-            box-shadow: 0 15px 60px rgba(255, 107, 157, 0.3);
-            animation: slideUp 0.4s ease-out;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translateY(50px);
+        /* Nomes com efeitos */
+        @keyframes brilhoNome {
+            0%, 100% { 
+                text-shadow: 0 0 5px #ff6b9d, 0 0 10px #ff6b9d;
+                color: #ff6b9d;
             }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
+            50% { 
+                text-shadow: 0 0 15px #ff1493, 0 0 25px #8f5cf4;
+                color: #ff1493;
             }
         }
 
-        .fechar {
-            color: var(--cor-primaria);
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+        @keyframes ondularNome {
+            0%, 100% { transform: translateY(0px); }
+            25% { transform: translateY(-5px); }
+            75% { transform: translateY(5px); }
+        }
+
+        .nomes-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nome {
+            font-size: 1.8em;
+            font-weight: 700;
+            animation: brilhoNome 3s ease-in-out infinite;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: transform 0.3s ease;
+            letter-spacing: 2px;
         }
 
-        .fechar:hover,
-        .fechar:focus {
-            color: var(--cor-destaque);
+        .nome:nth-child(1) {
+            animation-delay: 0s;
+            color: #ff6b9d;
         }
 
-        .modal-titulo {
-            color: var(--cor-primaria);
-            font-size: 2.2em;
-            margin-bottom: 20px;
-            text-align: center;
+        .nome:nth-child(2) {
+            animation-delay: 0.5s;
+            color: #8f5cf4;
         }
 
-        .modal-imagem {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 15px;
-            margin: 20px 0;
-            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.2);
+        .nome:hover {
+            animation: ondularNome 0.6s ease-in-out;
+            transform: scale(1.1);
         }
-
-        .modal-texto {
-            font-size: 1.1em;
-            line-height: 1.8;
-            color: #555;
-            text-align: justify;
-            margin: 20px 0;
-        }
-
-        /* Responsividade */
 
         .emojis-rodape {
             font-size: 2em;
@@ -368,84 +427,54 @@
             animation: brilho 2s ease-in-out infinite;
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: linear-gradient(135deg, #fff5f9 0%, #ffe6f0 100%);
-            margin: 10% auto;
-            padding: 40px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 700px;
-            box-shadow: 0 15px 60px rgba(255, 107, 157, 0.3);
-            animation: slideUp 0.4s ease-out;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translateY(50px);
+        /* Nomes com efeitos */
+        @keyframes brilhoNome {
+            0%, 100% { 
+                text-shadow: 0 0 5px #ff6b9d, 0 0 10px #ff6b9d;
+                color: #ff6b9d;
             }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
+            50% { 
+                text-shadow: 0 0 15px #ff1493, 0 0 25px #8f5cf4;
+                color: #ff1493;
             }
         }
 
-        .fechar {
-            color: var(--cor-primaria);
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+        @keyframes ondularNome {
+            0%, 100% { transform: translateY(0px); }
+            25% { transform: translateY(-5px); }
+            75% { transform: translateY(5px); }
+        }
+
+        .nomes-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nome {
+            font-size: 1.8em;
+            font-weight: 700;
+            animation: brilhoNome 3s ease-in-out infinite;
             cursor: pointer;
-            transition: color 0.3s;
+            transition: transform 0.3s ease;
+            letter-spacing: 2px;
         }
 
-        .fechar:hover,
-        .fechar:focus {
-            color: var(--cor-destaque);
+        .nome:nth-child(1) {
+            animation-delay: 0s;
+            color: #ff6b9d;
         }
 
-        .modal-titulo {
-            color: var(--cor-primaria);
-            font-size: 2.2em;
-            margin-bottom: 20px;
-            text-align: center;
+        .nome:nth-child(2) {
+            animation-delay: 0.5s;
+            color: #8f5cf4;
         }
 
-        .modal-imagem {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 15px;
-            margin: 20px 0;
-            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.2);
-        }
-
-        .modal-texto {
-            font-size: 1.1em;
-            line-height: 1.8;
-            color: #555;
-            text-align: justify;
-            margin: 20px 0;
+        .nome:hover {
+            animation: ondularNome 0.6s ease-in-out;
+            transform: scale(1.1);
         }
 
         /* Responsividade */
@@ -560,7 +589,7 @@
                 <div class="modal-content">
                     <span class="fechar" onclick="fecharModal('modal3')">&times;</span>
                     <h2 class="modal-titulo">⭐ Nosso Compromisso ⭐</h2>
-                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=700&h=300&fit=crop" alt="Mãos unidas" class="modal-imagem">
+                    <img src="https://images.unsplash.com/photo-1525336029099-994c31a90b42?w=700&h=300&fit=crop" alt="Casal em pôr do sol" class="modal-imagem">
                     <p class="modal-texto">
                         Comprometemos nossa vida um com o outro, dia após dia, escolhendo amar. Não apenas nos bons momentos, mas especialmente nos desafiadores. Juntos, somos invencíveis.
                     </p>
@@ -583,6 +612,11 @@
         <!-- Rodapé -->
         <footer>
             <p>Feito com <span class="destaque">❤️</span> e muito carinho para você</p>
+            <div class="nomes-container">
+                <span class="nome">Raul</span>
+                <span class="destaque" style="font-size: 1.8em;">💕</span>
+                <span class="nome">Ellen</span>
+            </div>
             <div class="emojis-rodape">💕 🌹 💖 ✨ 💗</div>
         </footer>
     </div>
@@ -629,22 +663,34 @@
             });
         });
 
-        // Funções dos modais
+        // Funções dos modais - CORRIGIDAS
         function abrirModal(idModal) {
-            document.getElementById(idModal).style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            const modal = document.getElementById(idModal);
+            modal.classList.add('ativo');
+            modal.style.display = 'block';
+            
+            // Levar a seção especial para trás
+            document.querySelector('.secao-especial').classList.add('atras');
         }
 
         function fecharModal(idModal) {
-            document.getElementById(idModal).style.display = 'none';
-            document.body.style.overflow = 'auto';
+            const modal = document.getElementById(idModal);
+            modal.classList.remove('ativo');
+            modal.style.display = 'none';
+            
+            // Trazer a seção especial para frente
+            document.querySelector('.secao-especial').classList.remove('atras');
         }
 
-        // Fechar modal ao clicar fora
+        // Fechar modal ao clicar fora (apenas no background)
         window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-                document.body.style.overflow = 'auto';
+            if (event.target.classList.contains('modal') && event.target.id) {
+                const modal = event.target;
+                modal.classList.remove('ativo');
+                modal.style.display = 'none';
+                
+                // Trazer a seção especial para frente
+                document.querySelector('.secao-especial').classList.remove('atras');
             }
         }
 
@@ -653,8 +699,11 @@
             if (event.key === 'Escape') {
                 document.querySelectorAll('.modal').forEach(modal => {
                     if (modal.style.display === 'block') {
+                        modal.classList.remove('ativo');
                         modal.style.display = 'none';
-                        document.body.style.overflow = 'auto';
+                        
+                        // Trazer a seção especial para frente
+                        document.querySelector('.secao-especial').classList.remove('atras');
                     }
                 });
             }
